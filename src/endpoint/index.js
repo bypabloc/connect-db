@@ -12,4 +12,10 @@ export default {
             params,
         })
     },
+    setManyQuerys( { params } ){
+        return endpoint.post({
+            url: 'test/debug/v2',
+            params,
+        })
+    },
 }
