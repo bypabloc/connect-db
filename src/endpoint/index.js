@@ -23,4 +23,10 @@ export default {
             url: 'test/user/3',
         })
     },
+    setCommand( { params } ){
+        return endpoint.post({
+            url: 'test/user/4',
+            params,
+        })
+    },
 }
