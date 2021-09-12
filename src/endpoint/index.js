@@ -8,14 +8,19 @@ export default {
     },
     setQuery( { params } ){
         return endpoint.post({
-            url: 'test/debug/v1',
+            url: 'test/user/1',
             params,
         })
     },
     setManyQuerys( { params } ){
         return endpoint.post({
-            url: 'test/debug/v2',
+            url: 'test/user/2',
             params,
+        })
+    },
+    setConfig(){
+        return endpoint.get({
+            url: 'test/user/3',
         })
     },
 }
