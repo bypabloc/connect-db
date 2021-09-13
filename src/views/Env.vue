@@ -36,13 +36,10 @@
 <script>
 import { ref, reactive, computed } from "vue";
 
-import ListClients from './ListClients'
-
 import axios from '../endpoint'
 
 export default {
     components: {
-        ListClients,
     },
     created() {
         
