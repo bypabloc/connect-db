@@ -1,10 +1,23 @@
 <template>
     <div class="container my-3 border">
-        <div class="container mt-3 p-3 border">
-            <div class="card card-body">
-                <pre v-if="result">{{ result }}</pre>
-            </div>
-        </div>
+
+        <table class="table table-striped table-dark table-hover mt-3 p-3 border">
+            <thead>
+                <tr>
+                    <th scope="col">KEY</th>
+                    <th scope="col">VALUE</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in vars" :key="index">
+                    <td><input type="text" v-model.trim="item.key" @input="item.key = $event.target.value.toUpperCase()"></td>
+                    <td><input type="text" v-model="item.value"></td>
+                    <td><button type="button" class="btn btn-outline-danger" @click="rem({index})">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+
         <div>
             <button class="btn btn-outline-danger mt-3" v-if="errors" :disabled="!errors" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-errors" aria-expanded="false" aria-controls="collapse-errors">
                 Ver errores
@@ -15,17 +28,21 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" @click="exec">Execute</button>
+        <button type="button" class="btn btn-primary m-3 " @click="add">Add</button>
+        <button type="button" class="btn btn-primary" @click="getVars">Guardar</button>
     </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, reactive, computed } from "vue";
+
+import ListClients from './ListClients'
 
 import axios from '../endpoint'
 
 export default {
     components: {
+        ListClients,
     },
     created() {
         
@@ -33,11 +50,19 @@ export default {
     setup: () => {
 
         const vars = ref([])
-
-        const result = ref(null)
         const errors = ref(null)
         
-        const exec = () => {
+        const add = () => {
+            vars.value.push({
+                new: true,
+            })
+        }
+        
+        const rem = ({index,}) => {
+            vars.value.splice(index,1)
+        }
+        
+        const getVars = () => {
             axios.setConfig({
                 params: {
                     values: vars.value,
@@ -45,11 +70,17 @@ export default {
             })
             .then(res => {
                 console.log('res',res)
-                result.value = res
+                vars.value = [];
+                for (const key in res.env) {
+                    vars.value.push({
+                        key,
+                        value: res.env[key],
+                    });
+                }
             })
             .catch(err => {
                 console.log('err',err)
-                result.value = null
+                vars.value = null
 
                 if(err?.response){
                     const { response } = err
@@ -70,24 +101,13 @@ export default {
             })
         }
 
-        exec();
-
-        /**
-         * deshashear la contraseña en laravel no es tan facil
-         * la APP_KEY del proyecto es la sig: base64:RU9HQHQ9hBt+XK9MSUO2zRt1JaNVj0nl7ITIGiPLpq4=
-         * lease este articulo para recordar: https://tighten.co/blog/app-key-and-you/
-         * lo que se puede hacer es obtener las contraseñas e intentar descifrarlas con el sig script;
-            $password = 'mypasswordhere12345';
-            // encrypt using password_hash()
-            $crypted = password_hash($password, PASSWORD_DEFAULT); 
-            
-            // decrypt using password_verify()
-            return password_verify($password, $crypted) ? 'Password Matches.' : 'Invalid password.';
-         */
+        getVars()
 
         return {
-            exec,
-            result,
+            getVars,
+            vars,
+            add,
+            rem,
             errors,
         };
     },

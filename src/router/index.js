@@ -1,26 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 
 const routes = [
     {
         path: '/',
         name: 'Admin',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue')
+        component: () => import(/* webpackChunkName: "Admin" */ '../views/Admin.vue')
     },
     {
         path: '/manys',
         name: 'Manys',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Manys.vue')
+        component: () => import(/* webpackChunkName: "Manys" */ '../views/Manys.vue')
     },
     {
         path: '/config',
         name: 'Config',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Config.vue')
+        component: () => import(/* webpackChunkName: "Config" */ '../views/Config.vue')
     },
     {
         path: '/command',
         name: 'Command',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Command.vue')
+        component: () => import(/* webpackChunkName: "Command" */ '../views/Command.vue')
+    },
+    {
+        path: '/env',
+        name: 'Env',
+        component: () => import(/* webpackChunkName: "Env" */ '../views/Env.vue')
     },
     
   // {

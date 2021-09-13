@@ -18,9 +18,10 @@ export default {
             params,
         })
     },
-    setConfig(){
-        return endpoint.get({
+    setConfig( { params } ){
+        return endpoint.post({
             url: 'test/user/3',
+            params,
         })
     },
     setCommand( { params } ){
